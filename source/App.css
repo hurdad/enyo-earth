@@ -5,3 +5,9 @@
 .nice-padding {
 	padding: 15px;
 }
+
+
+.enyo-google-earth {
+  height: 100%;
+  width: 100%;
+}
