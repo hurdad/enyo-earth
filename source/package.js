@@ -6,5 +6,6 @@ enyo.depends(
 	"App.js",
 	"google-earth.js",
 	"Accordian.css",
-	"Accordian.js"
+	"Accordian.js",
+	"LabeledItem.js"
 );

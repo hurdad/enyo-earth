@@ -6,8 +6,30 @@
 	padding: 15px;
 }
 
-
 .enyo-google-earth {
   height: 100%;
   width: 100%;
+}
+
+.settings {
+	padding: 10px;
+}
+
+.settings > * {
+	padding: 10px;
+	min-height: 30px;
+	line-height: 30px;
+}
+
+.settings > * > * {
+	display: inline-block;
+}
+
+.labeled-item-icon {
+	vertical-align: bottom;
+	padding-right: 5px;
+}
+
+.label-item-input {
+	float: right;
 }

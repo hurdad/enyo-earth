@@ -11,7 +11,8 @@ enyo.kind({
 		otherMapParams: ''
 	},
 	events: {
-		onEarthCreated: ''
+		onEarthCreated: '',
+		onKMLObjectLoaded: ''
 	},
 	constructor: function () {
 		this.inherited(arguments);
@@ -43,12 +44,16 @@ enyo.kind({
 		this.doEarthCreated();
     },
     failureCB: function(errorCode) {
+    	//todo
     },
     fetchKmlCB: function(kmlObject){
    		if (kmlObject)
           this.ge.getFeatures().appendChild(kmlObject);
        	if (kmlObject.getAbstractView() !== null)
           this.ge.getView().setAbstractView(kmlObject.getAbstractView());
+
+console.log(kmlObject)
+      	this.doKMLObjectLoaded('alex');
     },
     //* @public
     getInstance: function(){

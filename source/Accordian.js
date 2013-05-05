@@ -60,16 +60,13 @@ enyo.kind({
 	],
 	
 	create: function() {
+		
 		this.inherited(arguments);
-		
+
 		var headerComponent = { kind: "AccordionItemHeader", components:[{content: this.headerTitle}] };
-		
 		var wrappedComponents = [{kind: "enyo.Scroller", name: "scroller", components: this.contentComponents}];
 		var contentComponent = { kind: "AccordionItemContent", components: wrappedComponents };
-		
 		this.createComponents([headerComponent, contentComponent]);
-		
-		
 	},
 	
 	rendered: function() {
