@@ -24,7 +24,7 @@ enyo.kind({
 		{kind: "onyx.Toolbar", components: [
 			{kind: "onyx.Button", name: 'kmlbutton', content: "Add KML", ontap: "addKMLTap"},
 			{kind: "onyx.InputDecorator", components: [
-				{name: "input_kml", kind: "onyx.Input", style: "width:500px", placeholder: "Enter kml url here", value: "http://75.80.174.85/enyo-earth/kml/KML_Samples.kml"}
+				{name: "input_kml", kind: "onyx.Input", style: "width:500px", placeholder: "Enter kml url here", value: "http://75.80.174.85/enyo-earth/kml/KML_Samples_vis.kml"}
 			]}
 		]}
 	],
@@ -94,27 +94,4 @@ enyo.kind({
 	setView:  function(inSender, inEvent) {
  		this.$.google_earth.getInstance().getView().setAbstractView(inEvent.kmlObject.getAbstractView());
 	}
-
-
-
-/*
-	ontap: function(inSender, inEvent) {
-
-var cam = this.$.google_earth.getCurrentView();
-
-		console.log(cam.getLatitude());
-
-		//	console.log(this.$.google_earth.getInstance().getFeatures().getChildNodes().getLength())
-		//	console.log(this.$.google_earth.getInstance().getFeatures().getChildNodes().item(0).getType());
-		//	console.log(this.$.google_earth.getInstance().getFeatures().getChildNodes().item(0).getFeatures().getChildNodes().item(0).getType());
-
-		//	this.$.my_tree.createComponent(	{icon: "assets/file.png", content: "Alpha2"});
-		//	this.$.my_tree.render();
-
-
-	//	console.log(this.$.google_earth.getInstance().getElementByUrl('http://75.80.174.85/kml_example.kml#2').getType());
-	
-		//this.$.accordion.getItems()[ 2 ].$.borders.setValue(false);
-
-	}*/
 });

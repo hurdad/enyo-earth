@@ -3,11 +3,9 @@ enyo.kind({
 	name: "LabeledItem",
 	published: {
 		value: "",
-		label: "",
-		icon: ""
+		label: ""
 	},
 	components: [
-		//{name: "icon", kind: "Image", classes: "labeled-item-icon"},
 		{name: "label", kind: "Control"},
 		{name: "input", classes: "label-item-input"}
 	],
@@ -16,19 +14,14 @@ enyo.kind({
 		this.inherited(arguments);
 		this.valueChanged();
 		this.labelChanged();
-		this.iconChanged();
 	},
 	labelChanged: function() {
 		this.$.label.setContent(this.label);
-	},
-	iconChanged: function() {
-		//this.$.icon.setSrc(this.icon);
 	},
 	getValue: function() {
 		return this.$.input.getValue();
 	},
 	valueChanged: function() {
 		this.$.input.setValue(this.value);
-	},
-
+	}
 });

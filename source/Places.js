@@ -8,7 +8,7 @@ enyo.kind({
 	contentComponents:[
 		{kind: "Selection", onSelect: "select", onDeselect: "deselect"},
         {kind: "Scroller", fit: true, components: [
-			{kind: "Node", name:"tree", icon: "assets/folder-open.png", content: "My Places", expandable: true, expanded: true, onExpand: "nodeExpand", onNodeTap: "nodeTap", onCheckboxChanged:"checkboxChanged"}
+			{kind: "Node-Checkbox", name:"tree", icon: "assets/folder-open.png", content: "My Places", expandable: true, expanded: true, onExpand: "nodeExpand", onNodeTap: "nodeTap", onCheckboxChanged:"checkboxChanged"}
 		]}
     ],
     //* @protected
@@ -33,21 +33,16 @@ enyo.kind({
 	checkboxChanged: function(inSender, inEvent) {
 		var node = inEvent.originator;
 		node.kml.setVisibility(inEvent.value);
-		console.log(node)
-		console.log(inEvent)
-		
-
 	},
 	traverseKML: function(item, folder){
     	var i;
     	for(i = 0; i < item.getFeatures().getChildNodes().getLength(); i++){
-
     		//recursively scan folders
     		if(item.getFeatures().getChildNodes().item(i).getType() == 'KmlFolder'){
     			var new_folder = folder.createComponent({icon: "assets/folder.png", content: item.getFeatures().getChildNodes().item(i).getName(), expandable: true, expanded: false, kml: item.getFeatures().getChildNodes().item(i)});
     			this.traverseKML(item.getFeatures().getChildNodes().item(i), new_folder);
     		} else{
-    			folder.createComponent({icon: "assets/file.png", checkbox: item.getFeatures().getChildNodes().item(i).getVisibility(), content: item.getFeatures().getChildNodes().item(i).getName(), kml: item.getFeatures().getChildNodes().item(i)});	
+    			folder.createComponent({checkbox: item.getFeatures().getChildNodes().item(i).getVisibility(), content: item.getFeatures().getChildNodes().item(i).getName(), kml: item.getFeatures().getChildNodes().item(i)});	
     		}
     	}
     },

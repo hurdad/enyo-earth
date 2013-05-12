@@ -10,5 +10,6 @@ enyo.depends(
 	"LabeledItem.js",
 	"Search.js",
 	"Layers.js",
-	"Places.js"
+	"Places.js",
+	"Node-Checkbox.js"
 );
