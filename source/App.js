@@ -24,7 +24,7 @@ enyo.kind({
 		{kind: "onyx.Toolbar", components: [
 			{kind: "onyx.Button", name: 'kmlbutton', content: "Add KML", ontap: "addKMLTap"},
 			{kind: "onyx.InputDecorator", components: [
-				{name: "input_kml", kind: "onyx.Input", style: "width:500px", placeholder: "Enter kml url here", value: "http://75.80.174.85/enyo-earth/kml/KML_Samples_vis.kml"}
+				{name: "input_kml", kind: "onyx.Input", style: "width:500px", placeholder: "Enter kml url here", value: "http://localhost/enyo-earth/kml/KML_Samples_vis.kml"}
 			]}
 		]}
 	],
