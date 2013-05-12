@@ -33,3 +33,25 @@
 .label-item-input {
 	float: right;
 }
+
+.item.onyx-selected {
+	background-color: #226B9A;
+}
+.item {
+	position: relative;
+	border-bottom: 1px solid #0E0E0E;
+	padding: 16px 12px;
+	background-color: #eaeaea;
+	color:black;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: 12px;
+}
+
+.search-input{
+	width: 85%;
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

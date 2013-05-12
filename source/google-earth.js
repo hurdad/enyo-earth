@@ -44,7 +44,7 @@ enyo.kind({
 		this.doEarthCreated();
     },
     failureCB: function(errorCode) {
-    	//todo
+    	console.log('google earth create instance failure: ' + errorCode)
     },
     fetchKmlCB: function(kmlObject){
    		if (kmlObject)
@@ -52,8 +52,7 @@ enyo.kind({
        	if (kmlObject.getAbstractView() !== null)
           this.ge.getView().setAbstractView(kmlObject.getAbstractView());
 
-console.log(kmlObject)
-      	this.doKMLObjectLoaded('alex');
+      	this.doKMLObjectLoaded({kml: kmlObject});
     },
     //* @public
     getInstance: function(){
@@ -110,13 +109,27 @@ console.log(kmlObject)
 		lookAt.setRange(range); 
 		this.ge.getView().setAbstractView(lookAt);
 	},
-	addPlacemark: function(name, latitude, longitude){
-		var placemark = this.ge.createPlacemark(name);  
+	removePlacemark: function(placemark){
+		this.ge.getFeatures().removeChild(placemark);
+	},
+	addPlacemark: function(name, latitude, longitude, icon_href){
+		//placemark
+		var placemark = this.ge.createPlacemark('');  
+		placemark.setName(name);
+		//icon
+		var icon = this.ge.createIcon('');
+		icon.setHref(icon_href);
+		var style = this.ge.createStyle(''); //create a new style
+		style.getIconStyle().setIcon(icon); //apply the icon to the style
+		placemark.setStyleSelector(style); //apply the style to the placemark
+		//point
 		var point = this.ge.createPoint('');
 		point.setLatitude(latitude);
 		point.setLongitude(longitude);
 		placemark.setGeometry(point);
 		this.ge.getFeatures().appendChild(placemark);
+		//return
+		return placemark;
 	},
 	addGroundOverlay: function(href, north, south, east, west, rotation){
 		var groundOverlay = ge.createGroundOverlay('');
@@ -127,5 +140,9 @@ console.log(kmlObject)
 		latLonBox.setBox(north, south, east, west, rotation);
 		groundOverlay.setLatLonBox(latLonBox);
 		ge.getFeatures().appendChild(groundOverlay);
+		return groundOverlay;
+	},
+	getCurrentView: function(){
+		return this.ge.getView().copyAsLookAt(this.ge.ALTITUDE_RELATIVE_TO_GROUND);
 	}
 });

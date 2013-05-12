@@ -2,9 +2,6 @@ enyo.kind({
 	name: "App",
 	kind: "FittableRows",
 	fit: true,
-	handlers: {
-        onChange: "toggle"
-    },
 	components:[
 		{kind: "onyx.Toolbar", components:[
 			{content: "Enyo Earth"},
@@ -13,55 +10,22 @@ enyo.kind({
 			{kind: "Accordion", style: "width: 300px;", headerHeight: 40, components: [
 
 			    // First item of accordion
-			    {kind: "AccordionItem", headerTitle: "Search", maxHeight: 200, contentComponents:[
-			   		{style: "padding:10px;", components:[
-				    	{kind: "onyx.InputDecorator", setAlwaysLooksFocused: true, components: [
-							{name: "input_kml", kind: "onyx.Input", placeholder: "Address or Location"},
-							{kind: "Image", src: "assets/search-input-search.png"}
-						]},
-					]}
-			    ]},
+			    {kind: "SearchItem", name: "search", google_places_api_key: 'AIzaSyBSvrkeApSPIZ5hSU9F7nJrSv2kYqzMmFc', onCreatePlacemark: "createSearchPlacemark", onRemovePlacemark: "removeSearchPlacemark", onPanCamera: "panCamera"},
 
 			    // Second item of accordion
-			    {kind: "AccordionItem", headerTitle: "Places", contentComponents:[
-			        {kind: "Scroller", fit: true, components: [
-						{kind: "Node", icon: "assets/folder-open.png", content: "My Places", expandable: true, expanded: true, onExpand: "nodeExpand", onNodeTap: "nodeTap", components: [
-							{icon: "assets/file.png", content: "Alpha"},
-						]},
-					]}
-			    ]},
+			    {kind: "PlacesItem", name: "places", onSetView: "setView"},
+			    
+ 				// Third item of accordion
+			    {kind: "LayersItem", name: "layers", onGetGoogleEarth: 'getGoogleEarth'},
 
-			    // Second item of accordion
-			    {kind: "AccordionItem", headerTitle: "Layers", contentComponents:[
-			        {kind: "Scroller", classes: "enyo-fit", components: [
-						{kind: "onyx.Groupbox", classes: "settings", components: [
-							{kind: "onyx.GroupboxHeader", content: "Earth Layers"},
-							{kind: "LabeledItem", name:'borders', label:"Borders", defaultKind: "onyx.ToggleButton", value: true},
-							{kind: "LabeledItem", label:"Buildings", defaultKind: "onyx.ToggleButton"},
-							{kind: "LabeledItem", label:"Buildings Low Res", defaultKind: "onyx.ToggleButton"},
-							{kind: "LabeledItem", label:"Roads", defaultKind: "onyx.ToggleButton"},
-							{kind: "LabeledItem", label:"Terrain", defaultKind: "onyx.ToggleButton"},
-							{kind: "LabeledItem", label:"Trees", defaultKind: "onyx.ToggleButton"}
-						]},
-						{kind: "onyx.Groupbox", classes: "settings", components: [
-							{kind: "onyx.GroupboxHeader", content: "Overlays"},
-							{kind: "LabeledItem", label:"Scale Legend", defaultKind: "onyx.ToggleButton"},
-							{kind: "LabeledItem", label:"Status Bar", defaultKind: "onyx.ToggleButton"},
-							{kind: "LabeledItem", label:"Overview Map", defaultKind: "onyx.ToggleButton"},
-							{kind: "LabeledItem", label:"Grid", defaultKind: "onyx.ToggleButton"},
-							{kind: "LabeledItem", label:"Atmosphere", defaultKind: "onyx.ToggleButton", value: true}
-						]},
-					]}
-			    ]}
 			]},
 			{name: "google_earth", kind: "GoogleEarth", onEarthCreated: "earthLoaded", onKMLObjectLoaded: "KMLObjectLoaded", fit: true},
 		]},
 		{kind: "onyx.Toolbar", components: [
-			{kind: "onyx.Button", content: "Add KML", ontap: "addKMLTap"},
+			{kind: "onyx.Button", name: 'kmlbutton', content: "Add KML", ontap: "addKMLTap"},
 			{kind: "onyx.InputDecorator", components: [
-				{name: "input_kml", kind: "onyx.Input", style: "width:300px", placeholder: "Enter kml url here", value: "http://code.google.com/apis/earth/documentation/samples/kml_example.kml"}
-			]},
-			{kind: "onyx.Button", content: "Tap", ontap: "ontap"},
+				{name: "input_kml", kind: "onyx.Input", style: "width:500px", placeholder: "Enter kml url here", value: "http://75.80.174.85/enyo-earth/kml/KML_Samples.kml"}
+			]}
 		]}
 	],
 	rendered: function() {
@@ -69,7 +33,7 @@ enyo.kind({
 
 		//auto select first accordian panel
 		var index = 0;
-		this.$.accordion.toggleItem( this.$.accordion.getItems()[ index ] );
+		this.$.accordion.toggleItem( this.$.accordion.getItems()[ index ]);
 	},
 
 	earthLoaded: function(inSender, inEvent) {
@@ -79,52 +43,67 @@ enyo.kind({
 
 		//show borders
 		this.$.google_earth.toggleLayers(this.$.google_earth.getInstance().LAYER_BORDERS, true);
-		
-	
-	},
 
-	toggle: function(inSender, inEvent) {
-	
-		if(this.$.google_earth === undefined || this.$.google_earth.getInstance() === undefined)
-			return;
+		//pan camera
+		this.$.google_earth.panCamera(40, -90, 9000000);
 
-		var label = inEvent.originator.parent.getLabel();
-		var visibility = inEvent.originator.getValue();
 
-		if(label == "Borders")
-			this.$.google_earth.toggleLayers(this.$.google_earth.getInstance().LAYER_BORDERS, visibility);
-		else if( label == "Buildings")
-			this.$.google_earth.toggleLayers(this.$.google_earth.getInstance().LAYER_BUILDINGS, visibility);
-		else if( label == "Buildings Low Res")
-			this.$.google_earth.toggleLayers(this.$.google_earth.getInstance().LAYER_BUILDINGS_LOW_RESOLUTION, visibility);
-		else if( label == "Roads")
-			this.$.google_earth.toggleLayers(this.$.google_earth.getInstance().LAYER_ROADS, visibility);
-		else if( label == "Terrain")
-			this.$.google_earth.toggleLayers(this.$.google_earth.getInstance().LAYER_TERRAIN, visibility);
-		else if( label == "Trees")
-			this.$.google_earth.toggleLayers(this.$.google_earth.getInstance().LAYER_TREES, visibility);
-		else if( label == "Scale Legend")
-			this.$.google_earth.setScaleLegendVisibilty(visibility);
-		else if( label == "Status Bar")
-			this.$.google_earth.setStatusBarVisibility(visibility);
-		else if( label == "Overview Map")
-			this.$.google_earth.setOverviewMapVisibility(visibility);
-		else if( label == "Grid")
-			this.$.google_earth.setGridVisibility(visibility);
-		else if( label == "Atmosphere")
-			this.$.google_earth.setAtmosphereVisibility(visibility);
+		this.$.google_earth.setFlyToSpeed(0.4);
 	},
 
 	addKMLTap: function(inSender, inEvent) {
+		//disable button
+		this.$.kmlbutton.disabled = true;
+
+		//get url
 		var href = this.$.input_kml.getValue();
+
+		//fetch kml
 		this.$.google_earth.fetchKml(href);
 	},
 
 	KMLObjectLoaded: function(inSender, inEvent) {
-		console.log(inSender);
+
+		//enable button
+		this.$.kmlbutton.disabled = false;
+
+		//update place
+		this.$.places.addKML(inEvent.kml);
+
+		//show places accordian item
+		this.$.accordion.toggleItem( this.$.accordion.getItems()[ 1 ]);
 	},
 
+	removeSearchPlacemark: function(inSender, inEvent) {
+		this.$.google_earth.removePlacemark(inEvent.placemark);
+	},
+	
+	createSearchPlacemark: function(inSender, inEvent) {
+		var placemark = this.$.google_earth.addPlacemark(inEvent.name, inEvent.latitude, inEvent.longitude, 'http://maps.google.com/mapfiles/kml/paddle/red-circle.png');
+		this.$.search.placemark = placemark;
+	},
+
+	panCamera: function(inSender, inEvent) {
+		this.$.google_earth.panCamera(inEvent.latitude, inEvent.longitude, inEvent.range);
+	},
+
+	getGoogleEarth: function(inSender, inEvent) {
+		this.$.layers.updateGoogleEarth(this.$.google_earth);
+	},
+
+	setView:  function(inSender, inEvent) {
+ 		this.$.google_earth.getInstance().getView().setAbstractView(inEvent.kmlObject.getAbstractView());
+	}
+
+
+
+/*
 	ontap: function(inSender, inEvent) {
+
+var cam = this.$.google_earth.getCurrentView();
+
+		console.log(cam.getLatitude());
+
 		//	console.log(this.$.google_earth.getInstance().getFeatures().getChildNodes().getLength())
 		//	console.log(this.$.google_earth.getInstance().getFeatures().getChildNodes().item(0).getType());
 		//	console.log(this.$.google_earth.getInstance().getFeatures().getChildNodes().item(0).getFeatures().getChildNodes().item(0).getType());
@@ -135,7 +114,7 @@ enyo.kind({
 
 	//	console.log(this.$.google_earth.getInstance().getElementByUrl('http://75.80.174.85/kml_example.kml#2').getType());
 	
-	this.$.accordion.getItems()[ 2 ].$.borders.setValue(false);
+		//this.$.accordion.getItems()[ 2 ].$.borders.setValue(false);
 
-	}
+	}*/
 });
